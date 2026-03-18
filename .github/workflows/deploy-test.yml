@@ -1,8 +1,8 @@
-name: Deploy Backend to ECS
+name: Deploy Backend to ECS (Test)
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
 
 env:
   AWS_REGION: ap-southeast-2
