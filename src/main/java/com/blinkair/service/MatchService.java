@@ -58,11 +58,12 @@ public class MatchService {
     }
 
     public MatchStatusVO getActiveMatch(Long userId) {
-        Optional<MatchQueue> active = matchQueueRepository.findActiveByUserId(userId);
-        if (active.isEmpty()) {
+        List<MatchQueue> activeMatches = matchQueueRepository.findByUserIdAndStatusInOrderByCreatedAtDesc(
+                userId, List.of(MatchStatus.WAITING, MatchStatus.MATCHED));
+        if (activeMatches.isEmpty()) {
             return null;
         }
-        return toStatusVO(active.get(), userId);
+        return toStatusVO(activeMatches.get(0), userId);
     }
 
     @Transactional

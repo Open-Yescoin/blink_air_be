@@ -35,6 +35,20 @@ public class UserVO {
             vo.setCity(profile.getCity());
             vo.setCountryCode(profile.getCountryCode());
             vo.setBio(profile.getBio());
+        } else {
+            StringBuilder name = new StringBuilder();
+            if (user.getFirstName() != null && !user.getFirstName().isBlank()) {
+                name.append(user.getFirstName().trim());
+            }
+            if (user.getLastName() != null && !user.getLastName().isBlank()) {
+                if (name.length() > 0) {
+                    name.append(' ');
+                }
+                name.append(user.getLastName().trim());
+            }
+            if (name.length() > 0) {
+                vo.setName(name.toString());
+            }
         }
         return vo;
     }
