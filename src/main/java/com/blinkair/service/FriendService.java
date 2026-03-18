@@ -50,7 +50,13 @@ public class FriendService {
         }
 
         // Check if already friends
-        if (friendshipRepository.findByUserPair(chat.getUser1Id(), chat.getUser2Id()).isPresent()) {
+        var existingFriendship = friendshipRepository.findByUserPair(chat.getUser1Id(), chat.getUser2Id());
+        if (existingFriendship.isPresent()) {
+            Friendship friendship = existingFriendship.get();
+            if (!chatId.equals(friendship.getChatId())) {
+                friendship.setChatId(chatId);
+                friendshipRepository.save(friendship);
+            }
             return true;
         }
 

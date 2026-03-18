@@ -110,11 +110,14 @@ public class MatchService {
                 b.setStatus(MatchStatus.MATCHED);
                 b.setMatchedAt(now);
 
-                Chat chat = new Chat();
-                chat.setUser1Id(a.getUserId());
-                chat.setUser2Id(b.getUserId());
-                chat.setStatus(ChatStatus.ACTIVE);
-                chatRepository.save(chat);
+                Chat chat = chatRepository.findActiveByUserPair(a.getUserId(), b.getUserId())
+                        .orElseGet(() -> {
+                            Chat newChat = new Chat();
+                            newChat.setUser1Id(a.getUserId());
+                            newChat.setUser2Id(b.getUserId());
+                            newChat.setStatus(ChatStatus.ACTIVE);
+                            return chatRepository.save(newChat);
+                        });
 
                 matchQueueRepository.save(a);
                 matchQueueRepository.save(b);
